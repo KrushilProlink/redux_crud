@@ -2,19 +2,14 @@ import React from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, FormLabel, Grid, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addUser, editUser } from '../../redux/userSlice';
-import { v4 as uuidv4 } from "uuid";
 
 const Add = (props) => {
     const { isOpen, handleClose, data, type } = props
     const dispatch = useDispatch();
-
-    const generateUserId = () => {
-        const uuid = uuidv4();
-        const userId = uuid?.replace(/-/g, '')?.substring(0, 8);
-        return userId;
-      };
+    const user = useSelector((state) => state?.users);
+    const newId = Math?.max(...user?.map(item => item.id), 0) + 1;
 
     const validationSchema = yup.object({
         userName: yup.string().required('User Name is required'),
@@ -28,7 +23,6 @@ const Add = (props) => {
         email: data?.email,
         role: data?.role,
     };
-
     const { errors, values, handleChange, handleSubmit, handleReset, touched, } = useFormik({
         initialValues,
         validationSchema,
@@ -37,7 +31,7 @@ const Add = (props) => {
             if (type !== "edit") {
                 dispatch(
                     addUser({
-                        id: generateUserId(),
+                        id: newId,
                         userName: values?.userName,
                         email: values?.email,
                         role: values?.role,
