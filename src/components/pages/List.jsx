@@ -70,7 +70,7 @@ const List = () => {
                     </div>
                 </div>
 
-                <Box mt={2} className="table-responsive" style={{boxShadow: "rgb(0 0 0 / 21%) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px"}}>
+                <Box mt={2} className="table-responsive" style={{ boxShadow: "rgb(0 0 0 / 21%) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px" }}>
                     <table className="table table-striped table-hover border ">
                         <thead>
                             <tr>
@@ -90,8 +90,8 @@ const List = () => {
                                         <td className='no-wrap text-center'><Tooltip title={item?.email} arrow>{item?.email}</Tooltip></td>
                                         <td className='text-center'>{item?.role}</td>
                                         <td className='d-flex justify-content-around '>
-                                            <span role='button'> <DeleteOutlineIcon onClick={() => handleOpenDeleteModel(item?.id)} className='text-danger'/></span>
-                                            <span role='button'> <EditIcon onClick={() => handleOpen(item, "edit")} className='text-success'/></span>
+                                            <span role='button'> <DeleteOutlineIcon onClick={() => handleOpenDeleteModel(item?.id)} className='text-danger' /></span>
+                                            <span role='button'> <EditIcon onClick={() => handleOpen(item, "edit")} className='text-success' /></span>
                                         </td>
                                     </tr>
                                 ))
