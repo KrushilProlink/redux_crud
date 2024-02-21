@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
-import { Box, Button, Container, Stack, Typography } from '@mui/material';
-import DeleteModel from '../comman/DeleteModel'
-import Add from './Add';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, Container, Tooltip, Typography } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser } from '../../redux/userSlice';
-import { useNavigate } from 'react-router-dom';
+import DeleteModel from '../comman/DeleteModel'
 import Pagination from '../comman/Pagination';
+import Add from './Add';
 
 const List = () => {
-    const [isOpen, setIsOpen] = useState(false)
-    const [isOpenDelete, setIsOpenDelete] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
+    const [isOpenDelete, setIsOpenDelete] = useState(false);
     const [id, setId] = useState('');
     const [type, setType] = useState('');
     const [data, setData] = useState({});
@@ -19,7 +20,7 @@ const List = () => {
     const itemsPerPage = 10;
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const user = useSelector((state) => state.users);
+    const user = useSelector((state) => state?.users);
 
     const totalUsers = user?.length;
     const totalPages = Math.ceil(totalUsers / itemsPerPage);
@@ -39,12 +40,12 @@ const List = () => {
     const handleOpen = (item, type) => {
         setData(item);
         setIsOpen(true);
-        setType(type)
+        setType(type);
     }
 
     const handleOpenDeleteModel = (id) => {
-        setId(id)
-        setIsOpenDelete(true)
+        setId(id);
+        setIsOpenDelete(true);
     }
 
     const handleRemove = (id) => {
@@ -52,7 +53,7 @@ const List = () => {
     };
 
     const redirect = (id) => {
-        navigate(`/userDetails/${id}`)
+        navigate(`/userDetails/${id}`);
     }
 
 
@@ -60,34 +61,38 @@ const List = () => {
         <div className='table_wrapper'>
             <Add isOpen={isOpen} handleClose={handleClose} data={data} type={type} />
             <DeleteModel isOpenDeleteModel={isOpenDelete} handleCloseDeleteModel={() => setIsOpenDelete(false)} deleteData={handleRemove} id={id} />
+
             <Container>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" pt={1}>
+                <div className='d-flex justify-content-between align-items-center '>
                     <Typography variant="h4">User List</Typography>
                     <div>
-                        <Button onClick={() => handleOpen(null, "add")} variant='contained'>Add</Button>
+                        <Button onClick={() => handleOpen(null, "add")} variant='contained' startIcon={<AddIcon />} className='text-capitalize'>Add</Button>
                     </div>
-                </Stack>
-                <Box mt={2}>
-                    <table class="table table-striped table-hover border">
+                </div>
+
+                <Box mt={2} className="table-responsive" style={{boxShadow: "rgb(0 0 0 / 21%) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px"}}>
+                    <table className="table table-striped table-hover border ">
                         <thead>
                             <tr>
-                                <th scope="col">Id</th>
-                                <th scope="col">User Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Role</th>
-                                <th scope="col" colSpan={2}>Action</th>
+                                <th scope="col" className='text-center'>Id</th>
+                                <th scope="col" className='text-center'>User Name</th>
+                                <th scope="col" className='text-center'>Email</th>
+                                <th scope="col" className='text-center'>Role</th>
+                                <th scope="col" className='text-center'>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 userList && userList?.length > 0 ? userList?.map((item, index) => (
                                     <tr key={index}>
-                                        <th scope="row" className='no-wrap'>{item?.id}</th>
-                                        <td onClick={() => redirect(item?.id)} style={{ color: "blue", cursor: "pointer" }} className='text-capitalize no-wrap'>{item?.userName}</td>
-                                        <td className='no-wrap'>{item?.email}</td>
-                                        <td>{item?.role}</td>
-                                        <td><DeleteOutlineIcon onClick={() => handleOpenDeleteModel(item?.id)} style={{ cursor: "pointer" }} /></td>
-                                        <td><EditIcon onClick={() => handleOpen(item, "edit")} style={{ cursor: "pointer" }} /></td>
+                                        <th scope="row" className='no-wrap text-center'>{item?.id}</th>
+                                        <td onClick={() => redirect(item?.id)} style={{ color: "blue", cursor: "pointer" }} className='text-capitalize no-wrap text-center'><Tooltip title={item?.userName} arrow>{item?.userName}</Tooltip></td>
+                                        <td className='no-wrap text-center'><Tooltip title={item?.email} arrow>{item?.email}</Tooltip></td>
+                                        <td className='text-center'>{item?.role}</td>
+                                        <td className='d-flex justify-content-around '>
+                                            <span role='button'> <DeleteOutlineIcon onClick={() => handleOpenDeleteModel(item?.id)} className='text-danger'/></span>
+                                            <span role='button'> <EditIcon onClick={() => handleOpen(item, "edit")} className='text-success'/></span>
+                                        </td>
                                     </tr>
                                 ))
                                     :

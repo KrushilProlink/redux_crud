@@ -1,14 +1,20 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, FormLabel, Grid, MenuItem, Select, TextField, Typography } from '@mui/material';
 import React from 'react'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, FormLabel, Grid, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { addUser, editUser } from '../../redux/userSlice';
 import { useDispatch } from 'react-redux';
+import { addUser, editUser } from '../../redux/userSlice';
 import { v4 as uuidv4 } from "uuid";
 
 const Add = (props) => {
     const { isOpen, handleClose, data, type } = props
     const dispatch = useDispatch();
+
+    const generateUserId = () => {
+        const uuid = uuidv4();
+        const userId = uuid?.replace(/-/g, '')?.substring(0, 8);
+        return userId;
+      };
 
     const validationSchema = yup.object({
         userName: yup.string().required('User Name is required'),
@@ -23,7 +29,7 @@ const Add = (props) => {
         role: data?.role,
     };
 
-    const { errors, values, handleBlur, handleChange, handleSubmit, handleReset, touched, } = useFormik({
+    const { errors, values, handleChange, handleSubmit, handleReset, touched, } = useFormik({
         initialValues,
         validationSchema,
         enableReinitialize: true,
@@ -31,19 +37,19 @@ const Add = (props) => {
             if (type !== "edit") {
                 dispatch(
                     addUser({
-                        id: uuidv4(),
-                        userName: values.userName,
-                        email: values.email,
-                        role: values.role,
+                        id: generateUserId(),
+                        userName: values?.userName,
+                        email: values?.email,
+                        role: values?.role,
                     })
                 );
             } else {
                 dispatch(
                     editUser({
                         id: data?.id,
-                        userName: values.userName,
-                        email: values.email,
-                        role: values.role,
+                        userName: values?.userName,
+                        email: values?.email,
+                        role: values?.role,
                     }));
             }
             handleClose();
@@ -69,7 +75,7 @@ const Add = (props) => {
 
                 <DialogContent dividers>
                     <form>
-                        <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+                        <Grid container rowSpacing={2} columnSpacing={{ xs: 0, sm: 5, md: 3 }}>
                             <Grid item xs={12} sm={12} md={12}>
                                 <FormLabel>User Name</FormLabel>
                                 <TextField
@@ -127,7 +133,7 @@ const Add = (props) => {
                         type="submit"
                         variant="contained"
                         onClick={handleSubmit}
-                        style={{ textTransform: 'capitalize' }}
+                        className='text-capitalize'
                     >
                         Save
                     </Button>
@@ -135,7 +141,7 @@ const Add = (props) => {
                         type="reset"
                         variant="outlined"
                         color="error"
-                        style={{ textTransform: 'capitalize' }}
+                        className='text-capitalize'
                         onClick={() => {
                             handleReset();
                             handleClose();

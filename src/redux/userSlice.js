@@ -1,6 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
+const initialState = [
+  {
+    "id": "6b0355e1",
+    "userName": "john_doe",
+    "email": "john.doe@example.com",
+    "role": "user"
+  },
+  {
+    "id": "6b0375e1",
+    "userName": "jane_smith",
+    "email": "jane.smith@example.com",
+    "role": "admin"
+  },
+  {
+    "id": "6b0475e1",
+    "userName": "bob_jackson",
+    "email": "bob.jackson@example.com",
+    "role": "user"
+  },
+  {
+    "id": "6b0365e1",
+    "userName": "alice_jones",
+    "email": "alice.jones@example.com",
+    "role": "user"
+  },
+
+];
 
 const userSlice = createSlice({
   name: "users",
