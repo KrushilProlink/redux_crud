@@ -31,7 +31,7 @@ const Add = (props) => {
             if (type !== "edit") {
                 dispatch(
                     addUser({
-                        id: newId,
+                        id: newId?.toString(),
                         userName: values?.userName,
                         email: values?.email,
                         role: values?.role,
