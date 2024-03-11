@@ -4,6 +4,7 @@ import { Box, Button, Container, TextField, Tooltip, Typography } from '@mui/mat
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser } from '../../redux/userSlice';
 import DeleteModel from '../comman/DeleteModel'
@@ -15,12 +16,13 @@ const List = () => {
     const [data, setData] = useState({});
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenDelete, setIsOpenDelete] = useState(false);
+    const [sortConfig, setSortConfig] = useState({ key: null, order: 'asc' });
     const [id, setId] = useState('');
     const [type, setType] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
+
     const itemsPerPage = 10;
 
     const user = useSelector((state) => state?.users);
@@ -59,6 +61,16 @@ const List = () => {
         navigate(`/userDetails/${id}`);
     }
 
+    const handleSort = (key) => {
+        let order = 'asc';
+
+        if (sortConfig.key === key && sortConfig.order === 'asc') {
+            order = 'desc';
+        }
+
+        setSortConfig({ key, order });
+    };
+
 
     const handleSerach = (searchText) => {
         const filtered = user?.filter(({ userName, email, role }) =>
@@ -70,9 +82,32 @@ const List = () => {
         setUserList(searchText?.length > 0 ? (filtered?.length > 0 ? filtered : []) : user);
     }
 
-    useEffect(()=>{
+    const SortableHeader = ({ label, onClick, sorted, descending }) => (
+        <th scope="col" className='text-center' onClick={onClick}>
+            {label}
+            {sorted && <ArrowForwardIcon style={{ transform: descending ? 'rotate(90deg)' : 'rotate(270deg)',fontSize:"18px" }} />}
+        </th>
+    );
+
+    useEffect(() => {
+        const sortedData = [...user].sort((a, b) => {
+          const aValue = a[sortConfig.key] || '';
+          const bValue = b[sortConfig.key] || '';
+      
+          if (sortConfig.order === 'asc') {
+            return aValue.localeCompare(bValue);
+          } else {
+            return bValue.localeCompare(aValue);
+          }
+        });
+      
+        setUserList(sortedData);
+      }, [sortConfig, user]);
+      
+
+    useEffect(() => {
         handleSerach();
-    },[user])
+    }, [user])
 
     return (
         <div className='table_wrapper'>
@@ -92,10 +127,30 @@ const List = () => {
                     <table className="table table-striped table-hover border ">
                         <thead>
                             <tr>
-                                <th scope="col" className='text-center'>Id</th>
-                                <th scope="col" className='text-center'>User Name</th>
-                                <th scope="col" className='text-center'>Email</th>
-                                <th scope="col" className='text-center'>Role</th>
+                                <SortableHeader
+                                    label="Id"
+                                    onClick={() => handleSort('Id')}
+                                    sorted={sortConfig.key === 'Id'}
+                                    descending={sortConfig.order === 'desc'}
+                                />
+                                <SortableHeader
+                                    label="User Name"
+                                    onClick={() => handleSort('userName')}
+                                    sorted={sortConfig.key === 'userName'}
+                                    descending={sortConfig.order === 'desc'}
+                                />
+                                <SortableHeader
+                                    label="Email"
+                                    onClick={() => handleSort('email')}
+                                    sorted={sortConfig.key === 'email'}
+                                    descending={sortConfig.order === 'desc'}
+                                />
+                                <SortableHeader
+                                    label="Role"
+                                    onClick={() => handleSort('role')}
+                                    sorted={sortConfig.key === 'role'}
+                                    descending={sortConfig.order === 'desc'}
+                                />
                                 <th scope="col" className='text-center'>Action</th>
                             </tr>
                         </thead>
@@ -123,10 +178,10 @@ const List = () => {
                     </table>
                     <div className='pagination'>
                         {
-                            userList?.length > 0  &&
+                            userList?.length > 0 &&
                             <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
                         }
-                        
+
                     </div>
                 </Box>
             </Container>
