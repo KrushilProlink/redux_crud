@@ -85,25 +85,25 @@ const List = () => {
     const SortableHeader = ({ label, onClick, sorted, descending }) => (
         <th scope="col" className='text-center' onClick={onClick}>
             {label}
-            {sorted && <ArrowForwardIcon style={{ transform: descending ? 'rotate(90deg)' : 'rotate(270deg)',fontSize:"18px" }} />}
+            {sorted && <ArrowForwardIcon style={{ transform: descending ? 'rotate(90deg)' : 'rotate(270deg)', fontSize: "18px" }} />}
         </th>
     );
 
     useEffect(() => {
         const sortedData = [...user].sort((a, b) => {
-          const aValue = a[sortConfig.key] || '';
-          const bValue = b[sortConfig.key] || '';
-      
-          if (sortConfig.order === 'asc') {
-            return aValue.localeCompare(bValue);
-          } else {
-            return bValue.localeCompare(aValue);
-          }
+            const aValue = a[sortConfig.key] || '';
+            const bValue = b[sortConfig.key] || '';
+
+            if (sortConfig.order === 'asc') {
+                return aValue.localeCompare(bValue);
+            } else {
+                return bValue.localeCompare(aValue);
+            }
         });
-      
+
         setUserList(sortedData);
-      }, [sortConfig, user]);
-      
+    }, [sortConfig, user]);
+
 
     useEffect(() => {
         handleSerach();
@@ -117,12 +117,11 @@ const List = () => {
             <Container>
                 <div className='d-flex justify-content-between align-items-center '>
                     <Typography variant="h4">User List</Typography>
-                    <div>
-                        <TextField size='small' placeholder='Search' className='me-2' onChange={(e) => handleSerach(e.target.value)} />
-                        <Button onClick={() => handleOpen(null, "add")} variant='contained' startIcon={<AddIcon />} className='text-capitalize'>Add</Button>
-                    </div>
+                    <Button onClick={() => handleOpen(null, "add")} variant='contained' startIcon={<AddIcon />} className='text-capitalize'>Add</Button>
                 </div>
-
+                <div className='d-flex justify-content-end'>
+                    <TextField size='small' placeholder='Search' className='mt-2' onChange={(e) => handleSerach(e.target.value)} />
+                </div>
                 <Box mt={2} className="table-responsive" style={{ boxShadow: "rgb(0 0 0 / 21%) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px" }}>
                     <table className="table table-striped table-hover border ">
                         <thead>

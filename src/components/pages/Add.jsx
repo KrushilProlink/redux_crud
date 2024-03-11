@@ -28,15 +28,20 @@ const Add = (props) => {
         validationSchema,
         enableReinitialize: true,
         onSubmit: (values) => {
+            const exists = user?.find(({ email }) => email === values?.email)
             if (type !== "edit") {
-                dispatch(
-                    addUser({
-                        id: newId?.toString(),
-                        userName: values?.userName,
-                        email: values?.email,
-                        role: values?.role,
-                    })
-                );
+                if (exists) {
+                    alert("Email is already exists...")
+                } else {
+                    dispatch(
+                        addUser({
+                            id: newId?.toString(),
+                            userName: values?.userName,
+                            email: values?.email,
+                            role: values?.role,
+                        })
+                    );
+                }
             } else {
                 dispatch(
                     editUser({

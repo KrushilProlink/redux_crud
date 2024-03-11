@@ -67,30 +67,6 @@ const initialState = [
     "email": "zoe.campbell@example.com",
     "role": "admin"
   },
-  {
-    "id": "12",
-    "userName": "john_doe",
-    "email": "john.doe@example.com",
-    "role": "user"
-  },
-  {
-    "id": "13",
-    "userName": "jane_smith",
-    "email": "jane.smith@example.com",
-    "role": "admin"
-  },
-  {
-    "id": "14",
-    "userName": "bob_jackson",
-    "email": "bob.jackson@example.com",
-    "role": "user"
-  },
-  {
-    "id": "15",
-    "userName": "alice_jones",
-    "email": "alice.jones@example.com",
-    "role": "user"
-  },
 
 ];
 
