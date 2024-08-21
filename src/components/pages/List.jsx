@@ -128,8 +128,8 @@ const List = () => {
                             <tr>
                                 <SortableHeader
                                     label="Id"
-                                    onClick={() => handleSort('Id')}
-                                    sorted={sortConfig.key === 'Id'}
+                                    onClick={() => handleSort('id')}
+                                    sorted={sortConfig.key === 'id'}
                                     descending={sortConfig.order === 'desc'}
                                 />
                                 <SortableHeader
